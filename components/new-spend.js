@@ -1,5 +1,4 @@
 import { useState, useRef } from "react";
-import { basicStyle, dropdownStyle } from "../helpers/style";
 import { CURRENCIES } from "../helpers/utils";
 import useOutsideClick from "../hooks/useOutsideClick";
 
@@ -16,6 +15,9 @@ export default function NewSpend() {
     setNewSpendCurrency(currency);
     setDropdownVisible(false);
   };
+
+  const basicStyle = "rounded-lg shadow-lg p-4";
+  const dropdownStyle = `absolute w-full left-0 top-[100%] mt-2 bg-white rounded-lg p-2`;
 
   return (
     <form className="w-[800px] z-20">

@@ -1,17 +1,16 @@
 import { useState, useRef } from "react";
 import { CURRENCIES } from "../helpers/utils";
-import {
-  basicStyle,
-  filterButtonActive,
-  filterButtonInactive,
-  dropdownStyle,
-} from "../helpers/style";
 import useOutsideClick from "@/hooks/useOutsideClick";
 
 export default function Filters() {
   const [filteredCurrency, setFilteredCurrency] = useState("ALL");
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [sortBy, setSortBy] = useState("date-descending");
+
+  const basicStyle = "rounded-lg shadow-lg p-4";
+  const filterButtonInactive = `${basicStyle} flex-grow bg-white text-left`;
+  const filterButtonActive = `${basicStyle} flex-grow bg-sky-200 font-bold text-left text-sky-700`;
+  const dropdownStyle = `absolute w-full left-0 top-[100%] mt-2 bg-white rounded-lg p-2`;
 
   const handleSortChange = (currency) => {
     setDropdownVisible(false);
