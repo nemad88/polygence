@@ -1,18 +1,16 @@
 const URL =
-  "https://shielded-depths-43687-bb049deacd16.herokuapp.com/spendings";
+  "https://shielded-depths-43687-bb049deacd16.herokuapp.com/spendings/";
 
-export const getAllSpendings = async () => {
-  //   const currency = "?currency=HUF";
-  //   const order = "&order=spent_at";
-  const currency = "";
-  const order = "";
-  const res = await fetch(`${URL}${currency}${order}`);
+export const getSpendingsBy = async (order, currency) => {
+  console.log("Request: ", `${URL}?order=${order}&currency=${currency}`);
+  console.log("time: ", new Date().toISOString());
+  const res = await fetch(`${URL}?order=${order}&currency=${currency}`);
   const spendings = await res.json();
   return spendings;
 };
 
 export const addNewSpending = async (spending) => {
-  const res = await fetch(URL, {
+  const res = await fetch(`${URL}`, {
     method: "POST",
     body: JSON.stringify(spending),
     headers: {
@@ -20,6 +18,5 @@ export const addNewSpending = async (spending) => {
     },
   });
   const newSpending = await res.json();
-  console.log(newSpending, "added");
   return newSpending;
 };

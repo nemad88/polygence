@@ -1,20 +1,28 @@
-import { useState } from "react";
-import { CURRENCIES } from "../helpers/utils";
 import { Inter } from "next/font/google";
 import NewSpend from "@/components/new-spend";
 import Filters from "@/components/filters";
 import SpendList from "@/components/spend-list";
-import { getAllSpendings } from "@/helpers/api-utils";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import { fetchSpendingsBy, fetchAllSpending } from "@/store/spendingSlice";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home(props) {
-  const { spendings } = props;
+export default function Home() {
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const { order, currency, loading } = useSelector((state) => state.spending);
 
-  const [spending, setSpending] = useState();
-  const [amount, setAmount] = useState();
-  const [newSpendCurrency, setNewSpendCurrency] = useState(CURRENCIES[1]);
-  const [filteredCurrency, setFilteredCurrency] = useState("ALL");
+  useEffect(() => {
+    dispatch(
+      fetchSpendingsBy({
+        order,
+        currency,
+      })
+    );
+  }, [order, currency, dispatch]);
 
   return (
     <main
@@ -22,13 +30,7 @@ export default function Home(props) {
     >
       <NewSpend />
       <Filters />
-      <SpendList spendings={spendings} />
+      <SpendList />
     </main>
   );
-}
-
-export async function getServerSideProps() {
-  const spendings = await getAllSpendings();
-
-  return { props: { spendings } };
 }

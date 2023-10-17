@@ -1,30 +1,49 @@
 import { useState, useRef } from "react";
-import { CURRENCIES } from "../helpers/utils";
 import useOutsideClick from "@/hooks/useOutsideClick";
+import { changeCurrencyFilter, changeOrder } from "@/store/spendingSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const basicStyle = "rounded-lg shadow-lg p-4";
 const filterButtonInactive = `${basicStyle} flex-grow bg-white text-left hover:bg-sky-200 hover:text-sky-700`;
 const filterButtonActive = `${basicStyle} flex-grow bg-sky-200 font-bold text-left text-sky-700`;
 const dropdownStyle = `${basicStyle} absolute w-full left-0 top-[100%] mt-2 bg-white rounded-lg p-2`;
+const dropdownItemStyle =
+  "cursor-pointer hover:bg-sky-200 hover:text-sky-700 hover:rounded-lg p-2";
+
+const CURRENCY_FILTERS = ["ALL", "USD", "HUF"];
+const ORDER_FILTERS = {
+  "-spent_at": "Sort by Date descending (default)",
+  spent_at: "Sort by Date ascending",
+  amount: "Sort by Amount Ascending",
+  "-amount": "Sort by Amount Descending",
+};
 
 export default function Filters() {
-  const [filteredCurrency, setFilteredCurrency] = useState("ALL");
+  // STATE
   const [dropdownVisible, setDropdownVisible] = useState(false);
-  const [sortBy, setSortBy] = useState("date-descending");
 
-  const handleSortChange = (sortBy) => {
-    setSortBy(sortBy);
-    setDropdownVisible(false);
-  };
+  // REDUX
+  const dispatch = useDispatch();
+  const { currency: currencyFromRedux, order } = useSelector(
+    (state) => state.spending
+  );
 
+  // OTHER HOOKS
   const dropdownRef = useRef();
 
   useOutsideClick(dropdownRef, () => {
     if (dropdownVisible) setDropdownVisible(false);
   });
 
-  const dropdownItemStyle =
-    "cursor-pointer hover:bg-sky-200 hover:text-sky-700 hover:rounded-lg p-2";
+  // HANDLER FUNCTIONS
+  const handleOrderChange = (order) => {
+    dispatch(changeOrder(order));
+    setDropdownVisible(false);
+  };
+
+  const handleCurrencyFilterChange = (currency) => {
+    dispatch(changeCurrencyFilter(currency));
+  };
 
   return (
     <div className="flex justify-between mt-16 w-[800px]">
@@ -37,28 +56,31 @@ export default function Filters() {
             type="button"
             className={`${basicStyle} flex-grow bg-white text-left`}
           >
-            Sort by Date descending (default)
+            {ORDER_FILTERS[order]}
           </button>
           {dropdownVisible && (
             <ul className={dropdownStyle}>
               <li
                 className={dropdownItemStyle}
-                onClick={() => handleSortChange("date-decending")}
+                onClick={() => handleOrderChange("-spent_at")}
               >
                 Sort by Date descending
               </li>
               <li
                 className={dropdownItemStyle}
-                onClick={() => handleSortChange("date-ascending")}
+                onClick={() => handleOrderChange("spent_at")}
               >
                 Sort by Date ascending
               </li>
-              <li className={dropdownItemStyle} onClick={handleSortChange}>
+              <li
+                className={dropdownItemStyle}
+                onClick={() => handleOrderChange("amount")}
+              >
                 Sort by Amount Ascending
               </li>
               <li
                 className={dropdownItemStyle}
-                onClick={() => handleSortChange("date-ascending")}
+                onClick={() => handleOrderChange("-amount")}
               >
                 Sort by Amount Descending
               </li>
@@ -67,15 +89,26 @@ export default function Filters() {
         </div>
       </div>
       <div className="relative flex space-x-4">
-        {CURRENCIES.map((currency) => {
-          const style =
-            currency === filteredCurrency
-              ? filterButtonActive
-              : filterButtonInactive;
+        {CURRENCY_FILTERS.map((currency) => {
+          let style;
+
+          if (!currencyFromRedux) {
+            style =
+              currency.toLowerCase() === "all"
+                ? filterButtonActive
+                : filterButtonInactive;
+          } else {
+            style =
+              currencyFromRedux.toLowerCase() === currency.toLowerCase()
+                ? filterButtonActive
+                : filterButtonInactive;
+          }
 
           return (
             <button
-              onClick={() => setFilteredCurrency(currency)}
+              onClick={() => {
+                handleCurrencyFilterChange(currency);
+              }}
               className={style}
               key={currency}
             >

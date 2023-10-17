@@ -1,12 +1,11 @@
 const usdToHuf = 350;
 
-export const CURRENCIES = ["ALL", "HUF", "USD"];
-
 export const checkIsSpendingValid = (spending) => {
   for (const key in spending) {
     if (
       spending[key] === false ||
       spending[key] === 0 ||
+      spending[key] <= 0 ||
       spending[key] === null ||
       spending[key] === undefined
     ) {
