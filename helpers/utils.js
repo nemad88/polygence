@@ -1,3 +1,5 @@
+const usdToHuf = 350;
+
 export const CURRENCIES = ["ALL", "HUF", "USD"];
 
 export const checkIsSpendingValid = (spending) => {
@@ -23,4 +25,40 @@ export const getFormattedDate = (dateString) => {
   const timePart = date.toLocaleTimeString("en-US", timeOptions);
 
   return `${timePart} - ${datePart}`;
+};
+
+export const getFormattedAmount = (amount, currency) => {
+  if (currency === "USD") {
+    return `$${amount}`;
+  } else if (currency === "HUF") {
+    return `${amount} Ft`;
+  }
+};
+
+export const sortSpendings = (spendings, sortBy) => {
+  return spendings.sort((a, b) => {
+    let amountAInHuf = a.amount;
+    let amountBInHuf = b.amount;
+    if (a.currency === "USD") {
+      amountAInHuf *= usdToHuf;
+    }
+    if (b.currency === "USD") {
+      amountBInHuf *= usdToHuf;
+    }
+
+    switch (sortBy) {
+      case "date-descending":
+        return new Date(b.spent_at) - new Date(a.spent_at);
+      case "date-ascending":
+        return new Date(a.spent_at) - new Date(b.spent_at);
+      case "amount-ascending": {
+        return amountAInHuf - amountBInHuf;
+      }
+      case "amount-descending": {
+        return amountBInHuf - amountAInHuf;
+      }
+      default:
+        return 0;
+    }
+  });
 };
