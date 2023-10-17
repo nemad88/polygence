@@ -12,7 +12,6 @@ const initialState = {
 export const fetchSpendingsBy = createAsyncThunk(
   "spending/fetchSpendingsBy",
   async (payload) => {
-    console.log("payload", payload);
     return getSpendingsBy(payload?.order, payload?.currency);
   }
 );
@@ -48,7 +47,6 @@ export const spendingSlice = createSlice({
       })
       .addCase(fetchSpendingsBy.fulfilled, (state, action) => {
         state.loading = false;
-        console.log("action.payload", action.payload);
         state.spendings = action.payload;
       })
       .addCase(fetchSpendingsBy.rejected, (state) => {
