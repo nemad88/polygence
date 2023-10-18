@@ -4,6 +4,7 @@ import {
   getFormattedDate,
   getFormattedAmount,
 } from "../helpers/utils";
+import Loader from "@/components/loader";
 
 const basicStyle = "rounded-lg shadow-lg p-4";
 const filterButtonActive = `${basicStyle} flex-grow bg-sky-200 font-bold text-left text-sky-700`;
@@ -23,14 +24,18 @@ export default function SpendList() {
   const errorMessage = useSelector((state) => state.spending.errorMessage);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <Loader />
+      </div>
+    );
   }
 
   if (errorMessage) {
     return <div>{errorMessage}</div>;
   }
 
-  if (spendings?.length === 0) {
+  if (!spendings) {
     return <div>No spendings found</div>;
   }
 

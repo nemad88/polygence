@@ -6,7 +6,7 @@ const initialState = {
   order: "-spent_at",
   currency: "",
   spendingsErrorMessage: "",
-  spendings: [],
+  spendings: null,
 };
 
 export const fetchSpendingsBy = createAsyncThunk(

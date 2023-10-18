@@ -48,7 +48,7 @@ export default function Filters() {
   return (
     <div className="flex justify-between mt-16 w-[800px]">
       <div>
-        <div ref={dropdownRef} className="relative flex">
+        <div ref={dropdownRef} className="relative flex min-w-[300px]">
           <button
             onClick={() => setDropdownVisible(!dropdownVisible)}
             id="dropdown-button"

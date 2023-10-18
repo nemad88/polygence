@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+
 import { fetchSpendingsBy, fetchAllSpending } from "@/store/spendingSlice";
 
 const inter = Inter({ subsets: ["latin"] });
