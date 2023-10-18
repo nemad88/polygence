@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getSpendingsBy, addNewSpending } from "@/helpers/api-utils";
 
-const initialState = {
+export const initialState = {
   loading: false,
   order: "-spent_at",
   currency: "",
@@ -39,6 +39,12 @@ export const spendingSlice = createSlice({
     changeOrder(state, action) {
       state.order = action.payload;
     },
+    clearSpendingsErrorMessage(state) {
+      state.spendingsErrorMessage = "";
+    },
+    raiseAnError(state, action) {
+      state.spendingsErrorMessage = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -53,10 +59,24 @@ export const spendingSlice = createSlice({
         state.loading = false;
         state.spendingsErrorMessage = "Cannot fetch spendings";
       })
-      .addCase(createNewSpending.fulfilled, (state, action) => {});
+      .addCase(createNewSpending.fulfilled, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(createNewSpending.rejected, (state) => {
+        state.loading = false;
+        state.spendingsErrorMessage = "Cannot create new spending";
+      })
+      .addCase(createNewSpending.pending, (state) => {
+        state.loading = false;
+      });
   },
 });
 
-export const { changeCurrencyFilter, changeOrder } = spendingSlice.actions;
+export const {
+  changeCurrencyFilter,
+  changeOrder,
+  clearSpendingsErrorMessage,
+  raiseAnError,
+} = spendingSlice.actions;
 
 export default spendingSlice.reducer;

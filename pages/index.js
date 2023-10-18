@@ -5,16 +5,15 @@ import SpendList from "@/components/spend-list";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
-
-import { fetchSpendingsBy, fetchAllSpending } from "@/store/spendingSlice";
+import { fetchSpendingsBy } from "@/store/spendingSlice";
+import ErrorMessage from "@/components/error-message";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { order, currency, loading } = useSelector((state) => state.spending);
+  const { order, currency } = useSelector((state) => state.spending);
 
   useEffect(() => {
     dispatch(
@@ -29,6 +28,7 @@ export default function Home() {
     <main
       className={`flex min-h-screen flex-col items-center justify-start p-24 ${inter.className} `}
     >
+      <ErrorMessage />
       <NewSpend />
       <Filters />
       <SpendList />

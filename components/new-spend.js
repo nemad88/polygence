@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import useOutsideClick from "../hooks/useOutsideClick";
 import { useDispatch } from "react-redux";
-import { createNewSpending } from "@/store/spendingSlice";
+import { createNewSpending, raiseAnError } from "@/store/spendingSlice";
 import { checkIsSpendingValid } from "@/helpers/utils";
 
 const basicStyle = "rounded-lg shadow-lg p-4";
@@ -15,7 +15,6 @@ export default function NewSpend() {
   const [newSpendAmount, setNewSpendAmount] = useState(0);
   const [newSpendCurrency, setNewSpendCurrency] = useState(CURRENCIES[0]);
   const [dropdownVisible, setDropdownVisible] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
 
   // REDUX
   const dispatch = useDispatch();
@@ -48,20 +47,18 @@ export default function NewSpend() {
       setNewSpendDescription("");
       setNewSpendAmount(0);
     } else {
-      setErrorMessage("Invalid spending");
+      dispatch(raiseAnError("Please fill out all fields!"));
     }
   };
 
   return (
     <form className="w-[800px] z-20" onSubmit={handleNewSpendSubmit}>
-      {errorMessage}
       <div className="flex w-full  space-x-4">
         <input
           type="search"
           placeholder="description"
           value={newSpendDescription}
           onChange={(e) => {
-            setErrorMessage("");
             setNewSpendDescription(e.target.value);
           }}
           className={`${basicStyle} w-3/6`}
@@ -74,7 +71,6 @@ export default function NewSpend() {
           step={0.01}
           value={newSpendAmount}
           onChange={(e) => {
-            setErrorMessage("");
             setNewSpendAmount(e.target.value);
           }}
         ></input>

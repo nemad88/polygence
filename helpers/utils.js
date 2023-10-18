@@ -1,5 +1,3 @@
-const usdToHuf = 350;
-
 export const checkIsSpendingValid = (spending) => {
   for (const key in spending) {
     if (
@@ -32,32 +30,4 @@ export const getFormattedAmount = (amount, currency) => {
   } else if (currency === "HUF") {
     return `${amount} Ft`;
   }
-};
-
-export const sortSpendings = (spendings, sortBy) => {
-  return spendings.sort((a, b) => {
-    let amountAInHuf = a.amount;
-    let amountBInHuf = b.amount;
-    if (a.currency === "USD") {
-      amountAInHuf *= usdToHuf;
-    }
-    if (b.currency === "USD") {
-      amountBInHuf *= usdToHuf;
-    }
-
-    switch (sortBy) {
-      case "date-descending":
-        return new Date(b.spent_at) - new Date(a.spent_at);
-      case "date-ascending":
-        return new Date(a.spent_at) - new Date(b.spent_at);
-      case "amount-ascending": {
-        return amountAInHuf - amountBInHuf;
-      }
-      case "amount-descending": {
-        return amountBInHuf - amountAInHuf;
-      }
-      default:
-        return 0;
-    }
-  });
 };
