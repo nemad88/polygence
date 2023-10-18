@@ -3,12 +3,15 @@ import useOutsideClick from "@/hooks/useOutsideClick";
 import { changeCurrencyFilter, changeOrder } from "@/store/spendingSlice";
 import { useDispatch, useSelector } from "react-redux";
 
-const basicStyle = "rounded-lg shadow-lg p-4";
-const filterButtonInactive = `${basicStyle} flex-grow bg-white text-left hover:bg-sky-200 hover:text-sky-700`;
-const filterButtonActive = `${basicStyle} flex-grow bg-sky-200 font-bold text-left text-sky-700`;
+const baseStyle = "rounded-lg shadow-lg p-4";
+const hoverStyle = "hover:bg-sky-200 hover:text-sky-700";
+const flexStyle = "flex-grow bg-white text-left";
+
+const basicStyle = `${baseStyle} ${flexStyle}`;
+const filterButtonInactive = `${basicStyle} ${hoverStyle}`;
+const filterButtonActive = `${basicStyle} bg-sky-200 font-bold ${hoverStyle}`;
 const dropdownStyle = `${basicStyle} absolute w-full left-0 top-[100%] mt-2 bg-white rounded-lg p-2`;
-const dropdownItemStyle =
-  "cursor-pointer hover:bg-sky-200 hover:text-sky-700 hover:rounded-lg p-2";
+const dropdownItemStyle = `cursor-pointer ${hoverStyle} hover:rounded-lg p-2`;
 
 const CURRENCY_FILTERS = ["ALL", "USD", "HUF"];
 const ORDER_FILTERS = {
