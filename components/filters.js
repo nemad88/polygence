@@ -24,6 +24,7 @@ export default function Filters() {
 
   // REDUX
   const dispatch = useDispatch();
+
   const { currency: currencyFromRedux, order } = useSelector(
     (state) => state.spending
   );
