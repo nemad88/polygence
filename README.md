@@ -1,4 +1,4 @@
-This is a test assignment for Polygence.
+This is a coding challange for Polygence.
 
 ## Getting Started
 

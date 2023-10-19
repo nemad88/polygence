@@ -24,10 +24,9 @@ export const getFormattedDate = (dateString) => {
   return `${timePart} - ${datePart}`;
 };
 
-export const getFormattedAmount = (amount, currency) => {
+export const getFormattedAmount = (amount, currency) => {  
   if (currency === "USD") {
     return `$${amount}`;
-  } else if (currency === "HUF") {
-    return `${amount} Ft`;
   }
+  return `${amount} Ft`;
 };

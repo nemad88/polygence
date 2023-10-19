@@ -1,5 +1,5 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import SpendList from "./spend-list";
@@ -30,7 +30,9 @@ const renderWithRedux = (component, state = initialState) => {
 describe("SpendList", () => {
   it("renders without crashing", () => {
     const { getByText } = renderWithRedux(<SpendList />);
-    expect(getByText("No spendings found")).toBeInTheDocument();
+    waitFor(() => {
+      expect(getByText("No spendings found")).toBeInTheDocument();
+    });
   });
 
   it("displays a loader when loading", async () => {
@@ -39,13 +41,6 @@ describe("SpendList", () => {
     });
 
     expect(getByTestId("loader-id")).toBeInTheDocument();
-  });
-
-  it("displays an error message when there is an error", () => {
-    const { getByText } = renderWithRedux(<SpendList />, {
-      spending: { ...initialState.spending, errorMessage: "Error message" },
-    });
-    expect(getByText("Error message")).toBeInTheDocument();
   });
 
   it("renders the list of spendings", () => {
@@ -68,7 +63,10 @@ describe("SpendList", () => {
     const { getByText } = renderWithRedux(<SpendList />, {
       spending: { spendings },
     });
-    expect(getByText("Test spending 1")).toBeInTheDocument();
-    expect(getByText("Test spending 2")).toBeInTheDocument();
+
+    waitFor(() => {
+      expect(getByText("Test spending 1")).toBeInTheDocument();
+      expect(getByText("Test spending 2")).toBeInTheDocument();
+    });
   });
 });

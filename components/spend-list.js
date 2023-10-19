@@ -1,4 +1,6 @@
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { fetchSpendingsBy } from "@/store/spendingSlice";
 import {
   checkIsSpendingValid,
   getFormattedDate,
@@ -22,6 +24,19 @@ export default function SpendList() {
   const spendings = useSelector((state) => state.spending.spendings);
   const loading = useSelector((state) => state.spending.loading);
   const errorMessage = useSelector((state) => state.spending.errorMessage);
+  // REDUX
+  const dispatch = useDispatch();
+  const { order, currency } = useSelector((state) => state.spending);
+
+  // LOAD SPENDINGS
+  useEffect(() => {
+    dispatch(
+      fetchSpendingsBy({
+        order,
+        currency,
+      })
+    );
+  }, [order, currency, dispatch]);
 
   if (loading) {
     return (
